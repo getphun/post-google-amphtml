@@ -1,0 +1,42 @@
+<!doctype html>
+<html ⚡>
+<head>
+    <?= $this->meta->head($post); ?>
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style>
+    <noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    <?php if($comps): ?>
+        <?php foreach($comps as $comp): ?>
+        <script async custom-element="<?= $comp ?>" src="https://cdn.ampproject.org/v0/<?= $comp ?>-0.1.js"></script>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+</head>
+<body>
+    <?php
+        $ga_code = $this->setting->google_analytics_property;
+        if($ga_code){
+            echo '<amp-analytics type="googleanalytics" id="analytics1">';
+            echo '<script type="application/json">{"vars":{"account": "' . $ga_code . '"},"triggers":{"default pageview":{"on":"visible","request":"pageview"}}}</script>';
+            echo '</amp-analytics>';
+        }
+    ?>
+    
+    <div id="header">
+        <div class="container">
+            <h2>
+                <a href="<?= $post->page ?>">
+                    <?= $this->setting->site_name ?>
+                </a>
+            </h2>
+        </div>
+    </div>
+    
+    <div class="container" id="main">
+        <amp-img src="<?= $post->cover->_400x250 ?>" alt="<?= $post->title->safe ?>" width="400" height="250" layout="responsive"></amp-img>
+        <h1><?= $post->title->safe; ?></h1>
+        <div><?= $post->published->format('M d, Y') ?></div>
+        <?= $post->a_content ?>
+    </div>
+</body>
+</html>
