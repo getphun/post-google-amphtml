@@ -18,7 +18,8 @@ return [
         'post',
         'site',
         'site-meta',
-        'formatter'
+        'formatter',
+        '/banner'
     ],
     '_services' => [],
     '_autoload' => [

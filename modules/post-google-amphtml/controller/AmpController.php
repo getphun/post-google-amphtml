@@ -28,11 +28,40 @@ class AmpController extends \SiteController
         $ctn = '';
         if($post->embed)
             $ctn.= $post->embed->html;
-        $ctn.= '<p>' . $post->content->value . '</p>';
+        $ctn.= $post->content->value;
+        
+        // let put ads to the content
+        $ads = [];
+        if(module_exists('banner')){
+            $banners = $this->banner->get('amphtml');
+            if($banners){
+                $cptl = substr_count($ctn, '</p>');
+                $adsc = count($banners);
+                $fecp = ceil($cptl/$adsc);
+                $fecs = 0;
+                foreach($banners as $ban){
+                    $ads[$fecs] = $this->banner->render($ban);
+                    $fecs+= $fecp;
+                }
+                
+                $strpl = 0;
+                for($i=0; $i<$cptl; $i++){
+                    $lpos = strpos($ctn, '</p>', $strpl);
+                    if(!$lpos)
+                        break;
+                    $strpl = $lpos+4;
+                    if(isset($ads[$i]))
+                        $ctn = substr_replace($ctn, "\n\n".'#{ADS/'.$i.'}', $strpl, 0);
+                }
+                
+                foreach($ads as $ind => $ban)
+                    $ctn = str_replace('#{ADS/'.$ind.'}', $ban, $ctn);
+            }
+        }
         
         $camp_opt = [
             'localImagePath' => BASEPATH,
-            'localHost'      => $this->router->to('siteHome'),
+            'localHost'      => $this->router->to('siteHome')
         ];
         
         $camp = new \Camp($ctn, $camp_opt);
