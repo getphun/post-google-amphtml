@@ -30,7 +30,12 @@ class AmpController extends \SiteController
             $ctn.= $post->embed->html;
         $ctn.= '<p>' . $post->content->value . '</p>';
         
-        $camp = new \Camp($ctn);
+        $camp_opt = [
+            'localImagePath' => BASEPATH,
+            'localHost'      => $this->router->to('siteHome'),
+        ];
+        
+        $camp = new \Camp($ctn, $camp_opt);
         $post->a_content = $camp->amp;
         
         $params = [
