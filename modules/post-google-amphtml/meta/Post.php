@@ -29,6 +29,7 @@ class Post
         
         // metas
         $single = (object)[
+            'isamp'    => true,
             '_schemas' => [],
             '_metas'   => [
                 'title'         => $meta_title,
