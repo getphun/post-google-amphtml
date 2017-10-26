@@ -25,10 +25,7 @@ class AmpController extends \SiteController
         
         $post = \Formatter::format('post', $post, true);
         
-        $ctn = '';
-        if($post->embed)
-            $ctn.= $post->embed->html;
-        $ctn.= $post->content->value;
+        $ctn = $post->content->value;
         
         // let put ads to the content
         $ads = [];
@@ -59,6 +56,9 @@ class AmpController extends \SiteController
             }
         }
         
+        // fix img src tinymce
+        $ctn = str_replace('../../', '/', $ctn);
+        
         $camp_opt = [
             'localImagePath' => BASEPATH,
             'localHost'      => $this->router->to('siteHome')
@@ -71,6 +71,18 @@ class AmpController extends \SiteController
             'post' => $post,
             'comps' => $camp->components
         ];
+        
+        // let convert embed as well
+        if($post->embed->html){
+            $embed = new \Camp($post->embed->html);
+            $post->embed = $embed->amp;
+            foreach($embed->components as $comp){
+                if(!in_array($comp, $params['comps']))
+                    $params['comps'][] = $comp;
+            }
+        }else{
+            $post->embed = null;
+        }
         
         $params['post']->meta = _Post::single($post);
         
