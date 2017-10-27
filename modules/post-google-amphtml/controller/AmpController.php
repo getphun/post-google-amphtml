@@ -60,8 +60,9 @@ class AmpController extends \SiteController
         $ctn = str_replace('../../', '/', $ctn);
         
         $camp_opt = [
-            'localImagePath' => BASEPATH,
-            'localHost'      => $this->router->to('siteHome')
+            'localImagePath'    => BASEPATH,
+            'localHost'         => $this->router->to('siteHome'),
+            'iframePlaceholder' => '/theme/site/static/logo/500x500.png'
         ];
         
         $camp = new \Camp($ctn, $camp_opt);
@@ -74,7 +75,7 @@ class AmpController extends \SiteController
         
         // let convert embed as well
         if($post->embed->html){
-            $embed = new \Camp($post->embed->html);
+            $embed = new \Camp($post->embed->html, $camp_opt);
             $post->embed = $embed->amp;
             foreach($embed->components as $comp){
                 if(!in_array($comp, $params['comps']))
