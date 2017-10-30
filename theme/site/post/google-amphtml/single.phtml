@@ -10,17 +10,31 @@
         <?php endforeach; ?>
     <?php endif; ?>
     <script async src="https://cdn.ampproject.org/v0.js"></script>
-    <?php $ga_code = $this->setting->google_analytics_property; ?>
-    <?php if($ga_code): ?>
     <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
-    <?php endif; ?>
 </head>
 <body>
+    <?php $ga_code = $this->setting->google_analytics_property; ?>
     <?php if($ga_code): ?>
         <amp-analytics type="googleanalytics" id="analytics1">
         <script type="application/json">{"vars":{"account": "<?= $ga_code ?>"},"triggers":{"default pageview":{"on":"visible","request":"pageview"}}}</script>
         </amp-analytics>
     <?php endif; ?>
+    
+    <amp-analytics>
+        <script type="application/json">
+            {
+                "requests": {
+                    "pageview": "<?= $this->router->to('sitePostStatistic', [], ['id'=>$post->id, 'action'=>'view']) ?>"
+                },
+                "triggers": {
+                    "trackPageview": {
+                        "on": "visible",
+                        "request": "pageview"
+                    }
+                }
+            }
+        </script>
+    </amp-analytics>
     
     <div id="header">
         <div class="container">
