@@ -91,18 +91,14 @@ class Post
                 '@type'             => 'WebPage',
                 '@id'               => $meta_url
             ],
-            'publisher'     => [
-                '@type'         => 'Organization',
-                'name'          => $dis->config->name,
-                'url'           => $base_url,
-                'logo'          => [
-                    '@type'         => 'ImageObject',
-                    'url'           => $base_url . 'theme/site/static/logo/200x60.png',
-                    'height'        => 60,
-                    'width'         => 200
-                ]
-            ]
+            'publisher'     => $dis->meta->schemaOrganization(),
+            'discussionUrl' => $post->page . '#comment',
+            'isAccessibleForFree' => true
         ];
+        if($post->source)
+            $schema['isBasedOn'] = $post->source;
+        if($post->meta_keywords)
+            $schema['keywords'] = $post->meta_keywords;
         $single->_schemas[] = $schema;
         
         // schema breadcrumbs
