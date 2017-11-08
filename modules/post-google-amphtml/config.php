@@ -19,14 +19,16 @@ return [
         'site',
         'site-meta',
         'formatter',
-        '/banner'
+        '/banner',
+        '/event'
     ],
     '_services' => [],
     '_autoload' => [
         'classes' => [
             'Camp' => 'modules/post-google-amphtml/third-party/Camp.php',
             'PostGoogleAmphtml\\Controller\\AmpController' => 'modules/post-google-amphtml/controller/AmpController.php',
-            'PostGoogleAmphtml\\Meta\\Post' => 'modules/post-google-amphtml/meta/Post.php'
+            'PostGoogleAmphtml\\Meta\\Post' => 'modules/post-google-amphtml/meta/Post.php',
+            'PostGoogleAmphtml\\Event\\PostEvent' => 'modules/post-google-amphtml/event/PostEvent.php'
         ],
         'files' => []
     ],
@@ -38,5 +40,14 @@ return [
                 'handler' => 'PostGoogleAmphtml\\Controller\\Amp::index'
             ]
         ]
-    ]
+    ],
+    
+    'events' => [
+        'post:updated' => [
+            'post-google-amphtml' => 'PostGoogleAmphtml\\Event\\PostEvent::updated'
+        ],
+        'post:deleted' => [
+            'post-google-amphtml' => 'PostGoogleAmphtml\\Event\\PostEvent::deleted'
+        ]
+    ],
 ];
